@@ -1,6 +1,7 @@
 package com.toyproject.vending_machine.controller;
 
 import com.toyproject.vending_machine.dao.VendingMachineDAO;
+import com.toyproject.vending_machine.dto.ResponseDTO;
 import com.toyproject.vending_machine.dto.VendingMachineDTO;
 import com.toyproject.vending_machine.vo.ConditionVO;
 import com.toyproject.vending_machine.vo.ModifyVO;
@@ -23,7 +24,7 @@ public class VendingMachineController {
 
     @GetMapping("/list")
     public ResponseEntity<Object> list() {
-        return ResponseEntity.ok(vendingMachineDAO.getList());
+        return ResponseEntity.ok(ResponseDTO.responseForm("success", "200", vendingMachineDAO.getList()));
     }
 
     @PostMapping("/register")
@@ -33,21 +34,21 @@ public class VendingMachineController {
 
         if (!isExist) {
             registerMachine.setMessage("register success");
-            return ResponseEntity.ok(registerMachine);
+            return ResponseEntity.ok(ResponseDTO.responseForm("success", "200", registerMachine));
         } else {
             registerMachine.setMessage("register fail. duplicated code or name");
-            return ResponseEntity.badRequest().body(registerMachine);
+            return ResponseEntity.badRequest().body(ResponseDTO.responseForm("fail", "404", registerMachine));
         }
     }
 
     @PostMapping("/search")
     public ResponseEntity<Object> findTarget(@RequestBody ConditionVO conditionVO) {
         List<VendingMachineVO> searchList = vendingMachineDAO.search(conditionVO);
-        return ResponseEntity.ok(searchList);
+        return ResponseEntity.ok(ResponseDTO.responseForm("success", "200", searchList));
     }
 
     @PutMapping("/modify")
     public ResponseEntity<Object> modify(@RequestBody ModifyVO modifyVO) {
-        return ResponseEntity.ok(vendingMachineDAO.modify(modifyVO));
+        return ResponseEntity.ok(ResponseDTO.responseForm("success", "200", vendingMachineDAO.modify(modifyVO)));
     }
 }

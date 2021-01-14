@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VendingMachineConfig {
     // @Component를 상속하는 어노테이션들은 자동으로 bean이 되는 것을 확인하기 위한 주석
+    // 결과> 된다.
     /*@Bean
     public VendingMachineController vendingMachineController() {
         return new VendingMachineController();

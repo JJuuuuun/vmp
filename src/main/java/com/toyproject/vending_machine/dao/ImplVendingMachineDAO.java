@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Repository
 public class ImplVendingMachineDAO implements VendingMachineDAO {
 
-    private List<VendingMachineVO> machines;
+    private final List<VendingMachineVO> machines;
 
     public ImplVendingMachineDAO() {
         machines = new ArrayList<>();
@@ -24,9 +24,8 @@ public class ImplVendingMachineDAO implements VendingMachineDAO {
             long code1 = o1.getCode();
             long code2 = o2.getCode();
 
-            if (code1 > code2) return 1;
-            else if (code1 == code2) return 0;
-            else return -1;
+            // 3 if 구절 대체
+            return Long.compare(code1, code2);
         }));
         return machines;
     }
@@ -52,7 +51,7 @@ public class ImplVendingMachineDAO implements VendingMachineDAO {
         boolean isNameExist = machines.stream()
                 .anyMatch(each -> each.getName().equals(vo.getName()));
 
-        return !(isCodeExist && isNameExist);
+        return !(isCodeExist || isNameExist);
     }
 
     @Override
@@ -71,9 +70,7 @@ public class ImplVendingMachineDAO implements VendingMachineDAO {
             long code1 = o1.getCode();
             long code2 = o2.getCode();
 
-            if (code1 > code2) return 1;
-            else if (code1 == code2) return 0;
-            else return -1;
+            return Long.compare(code1, code2);
         });
 
         return list;
@@ -91,7 +88,7 @@ public class ImplVendingMachineDAO implements VendingMachineDAO {
     }
 
     private VendingMachineVO findTarget(ModifyVO vo) {
-        VendingMachineVO vendingMachineVO = null, tempVO = null;
+        VendingMachineVO vendingMachineVO = null, tempVO;
 
         for (VendingMachineVO machine : machines) {
             tempVO = machine;
