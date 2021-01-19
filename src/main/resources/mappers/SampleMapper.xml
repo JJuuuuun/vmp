@@ -17,4 +17,9 @@
         SELECT NOW();
     </select>
 
+    <insert id="insertTestData" parameterType="com.toyproject.vending_machine.vo.TestVO">
+        INSERT INTO test VALUES (#{id}, #{name});
+    </insert>
+
+
 </mapper>

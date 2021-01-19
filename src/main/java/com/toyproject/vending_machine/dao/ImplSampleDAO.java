@@ -2,6 +2,7 @@ package com.toyproject.vending_machine.dao;
 
 import com.toyproject.vending_machine.dto.SampleDTO;
 import com.toyproject.vending_machine.mapper.SampleMapper;
+import com.toyproject.vending_machine.vo.TestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,10 @@ public class ImplSampleDAO implements SampleDAO {
     @Override
     public String getTime() {
         return sampleMapper.getTime();
+    }
+
+    @Override
+    public void insertTestData(TestVO vo) {
+        sampleMapper.insertTestData(vo);
     }
 }
