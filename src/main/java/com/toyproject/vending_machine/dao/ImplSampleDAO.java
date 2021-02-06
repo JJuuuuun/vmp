@@ -18,9 +18,4 @@ public class ImplSampleDAO implements SampleDAO {
     public String getTime() {
         return sampleMapper.getTime();
     }
-
-    @Override
-    public void insertTestData(TestVO vo) {
-        sampleMapper.insertTestData(vo);
-    }
 }

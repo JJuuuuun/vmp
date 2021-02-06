@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.toyproject.vending_machine.mapper.VmMapper">
+    <insert id="registryVendingMachine" parameterType="com.toyproject.vending_machine.vo.VendingMachineVO">
+        INSERT INTO machine
+        VALUES (#{vmId}, #{vmName}, #{vmStatus}, #{vmChanges});
+    </insert>
+
+    <insert id="registryLocation" parameterType="com.toyproject.vending_machine.vo.LocationVO">
+        INSERT INTO location
+        VALUES (#{vmId}, #{vo.x}, #{vo.y});
+    </insert>
+
+    <insert id="registryItem" parameterType="com.toyproject.vending_machine.vo.ItemVO">
+        INSERT INTO item
+        VALUES (#{vmId}, #{vo.itemId}, #{vo.itemName}, #{vo.itemQuantity}, #{vo.itemVolume}, #{vo.itemVolumeUnit}, #{vo.itemExpireDate});
+    </insert>
+
+    <select id="getVmHasAllItems" parameterType="string" resultType="com.toyproject.vending_machine.vo.ItemVO">
+        SELECT *
+        FROM item
+        WHERE vmId = #{vmId};
+    </select>
+
+    <select id="getVmBasicInfo" parameterType="string" resultType="com.toyproject.vending_machine.vo.VendingMachineVO">
+        SELECT *
+        FROM machine
+        WHERE vmId = #{vmId};
+    </select>
+
+    <select id="getVmLocation" parameterType="string" resultType="com.toyproject.vending_machine.vo.LocationVO">
+        SELECT *
+        FROM location
+        WHERE vmId = ${vmId};
+    </select>
+
+
+    <select id="showAllVmList" resultType="com.toyproject.vending_machine.vo.VendingMachineVO">
+        SELECT *
+        FROM vendingMachine.machine;
+    </select>
+
+    <select id="getVmIdLists" resultType="java.lang.String">
+        SELECT vmId
+        FROM machine;
+    </select>
+</mapper>

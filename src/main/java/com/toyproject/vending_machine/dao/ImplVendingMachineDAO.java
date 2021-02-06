@@ -1,35 +1,77 @@
 package com.toyproject.vending_machine.dao;
 
-import com.toyproject.vending_machine.dto.VendingMachineDTO;
-import com.toyproject.vending_machine.vo.ConditionVO;
-import com.toyproject.vending_machine.vo.ModifyVO;
+import com.toyproject.vending_machine.dto.ItemRegistryObj;
+import com.toyproject.vending_machine.dto.VmInfoObj;
+import com.toyproject.vending_machine.dto.VmRegistryObj;
+import com.toyproject.vending_machine.mapper.VmMapper;
+import com.toyproject.vending_machine.vo.ItemVO;
+import com.toyproject.vending_machine.vo.LocationVO;
 import com.toyproject.vending_machine.vo.VendingMachineVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional
 public class ImplVendingMachineDAO implements VendingMachineDAO {
 
-    private final List<VendingMachineVO> machines;
+    @Autowired
+    VmMapper vmMapper;
 
-    public ImplVendingMachineDAO() {
-        machines = new ArrayList<>();
+    @Override
+    public boolean vmRegistry(VmRegistryObj vo) {
+        try {
+            vmMapper.registryVendingMachine(VendingMachineVO.getInstance(vo.getVmId(), vo.getVmName()));
+            vmMapper.registryLocation(vo.getVmId(), LocationVO.getInstance(vo.getVmLocations()));
+
+            return true;
+        } catch (Exception e) {
+            System.out.println("Vending Machine registry fail : this message is in ImplVendingMachineDAO");
+            e.printStackTrace();
+            return false;
+        }
+   }
+
+    @Override
+    public boolean itemRegistry(ItemRegistryObj vo) {
+        try {
+//            convert ?? vo.getItem().getItemExpireDate();
+            vmMapper.registryItem(vo.getVmId(), vo.getItem());
+
+            return true;
+        } catch (Exception e) {
+            System.out.println("Item registry fail : this message is in ImplVendingMachineDAO");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public List<VendingMachineVO> getList() {
-        machines.sort(((o1, o2) -> {
-            long code1 = o1.getCode();
-            long code2 = o2.getCode();
-
-            // 3 if 구절 대체
-            return Long.compare(code1, code2);
-        }));
-        return machines;
+    public List<ItemVO> getVmHasAllItems(String vmId) {
+        return vmMapper.getVmHasAllItems(vmId);
     }
 
+    @Override
+    public VmInfoObj getVmInfo(String vmId) {
+        VmInfoObj infoObj = new VmInfoObj();
+        infoObj.setProperties(
+                vmMapper.getVmBasicInfo(vmId)
+                , vmMapper.getVmHasAllItems(vmId)
+                , vmMapper.getVmLocation(vmId)
+        );
+
+        return infoObj;
+    }
+
+    @Override
+    public List<String> getVmIdLists() {
+        return vmMapper.getVmIdLists();
+    }
+
+    /*
     @Override
     public boolean register(VendingMachineVO vo) {
         //  code    name
@@ -118,5 +160,5 @@ public class ImplVendingMachineDAO implements VendingMachineDAO {
             vendingMachineVO.setName(modifyVO.getValue());
 
         return vendingMachineVO;
-    }
+    }*/
 }
