@@ -20,14 +20,11 @@ public class VendingMachineController {
 
     private final Map<String, Object> dataMap = new HashMap<>();
     private final List<Object> dataList = new ArrayList<>();
-    private void clearDataObject (Collection data) {
-        data.clear();
-    }
 
     @PostMapping("/registry")
     public ResponseEntity<ResponseDTO> registry(@RequestBody VmRegistryObj requestData) {
         if (!dataMap.isEmpty())
-            clearDataObject((Collection) dataMap);
+            dataMap.clear();
 
         if (vendingMachineDAO.vmRegistry(requestData)) {
             dataMap.put("vmId", requestData.getVmId());
@@ -41,7 +38,7 @@ public class VendingMachineController {
     @PostMapping("/registry/item")
     public ResponseEntity<ResponseDTO> itemRegistry(@RequestBody ItemRegistryObj requestData) {
         if (!dataMap.isEmpty())
-            clearDataObject((Collection) dataMap);
+            dataMap.clear();
 
         if (vendingMachineDAO.itemRegistry(requestData)) {
             dataMap.put("vmItemList", vendingMachineDAO.getVmHasAllItems(requestData.getVmId()));
@@ -53,7 +50,7 @@ public class VendingMachineController {
     @GetMapping("/list")
     public ResponseEntity<ResponseDTO> showList() {
         if (!dataList.isEmpty())
-            clearDataObject(dataList);
+            dataList.clear();
 
         List<String> vmIdLists = vendingMachineDAO.getVmIdLists();
         for (String vmId : vmIdLists) {
@@ -68,7 +65,7 @@ public class VendingMachineController {
     @GetMapping("/info")
     public ResponseEntity<ResponseDTO> info(@RequestParam("vmId") String vmId) {
         if (!dataMap.isEmpty())
-            clearDataObject((Collection) dataMap);
+            dataMap.clear();
 
         VmInfoObj infoObj = vendingMachineDAO.getVmInfo(vmId);
         if (!Objects.isNull(infoObj)) {
